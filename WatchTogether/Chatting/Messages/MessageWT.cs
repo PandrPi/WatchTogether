@@ -29,17 +29,27 @@ namespace WatchTogether.Chatting.Messages
 		public int UserID { get; private set; }
 
 		/// <summary>
+		/// The Name of the user from whom the message was received
+		/// </summary>
+		public string UserName { get; private set; }
+
+		/// <summary>
 		/// Initializes a new MessageWT instance
 		/// </summary>
 		/// <param name="text">The text of the message</param>
 		/// <param name="receivingDateTime">The DateTime object that represents the time when the message was received</param>
 		/// <param name="messageType">Determines whether the message belongs to internal messages of the app</param>
-		public MessageWT(string text, DateTime receivingDateTime, MessageTypeWT messageType, int userID)
+		public MessageWT(string text,
+                   DateTime receivingDateTime,
+                   MessageTypeWT messageType,
+                   int userID,
+                   string userName)
 		{
 			Text = text ?? throw new ArgumentNullException(nameof(text));
 			ReceivingDateTime = receivingDateTime;
 			MessageType = messageType;
 			UserID = userID;
+			UserName = userName;
 		}
 
 		/// <summary>
@@ -62,7 +72,7 @@ namespace WatchTogether.Chatting.Messages
 		/// <summary>
 		/// Deserializes the specified message string (in JSON format) to a new MessageWT instance
 		/// </summary>
-		/// <param name="message">The message json string</param>
+		/// <param name="message">The message Json string</param>
 		/// <returns>The new MessageWT instance</returns>
 		public static MessageWT FromString(string messageString)
 		{

@@ -82,38 +82,109 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="FullscreenWindow.xaml">
+    <Compile Include="Browser\AdBlocker.cs" />
+    <Compile Include="Browser\BrowserCommands\ClientConnectionResponceCommand.cs" />
+    <Compile Include="Browser\BrowserCommands\DisconnectClientCommand.cs" />
+    <Compile Include="Browser\BrowserCommands\ResponceStatus.cs" />
+    <Compile Include="Browser\BrowserCommands\RewindVideoCommand.cs" />
+    <Compile Include="Browser\BrowserCommands\UpdateConnectedClientsCommand.cs" />
+    <Compile Include="Browser\BrowserManagerWT.cs" />
+    <Compile Include="Browser\BrowserCommands\ClientConnectionRequestCommand.cs" />
+    <Compile Include="Browser\FullscreenHelper.cs" />
+    <Compile Include="Chatting\ChatManagerWT.cs" />
+    <Compile Include="Chatting\ClientData.cs" />
+    <Compile Include="Chatting\Messages\Converters\BoolToFlowDirectionConverter.cs" />
+    <Compile Include="Chatting\Messages\Converters\BoolToHorizontalAlignmentConverter.cs" />
+    <Compile Include="Chatting\Messages\Converters\StringToVisibilityConverter.cs" />
+    <Compile Include="Chatting\Messages\MessageData.cs" />
+    <Compile Include="Chatting\UserIconColorBrushManager.cs" />
+    <Compile Include="Chatting\UserIconHelper.cs" />
+    <Compile Include="Settings\SettingsModelManager.cs" />
+    <Compile Include="Settings\SettingsModel.cs" />
+    <Compile Include="Tcp\IMessageProcessor.cs" />
+    <Compile Include="Tcp\ITcpClientWT.cs" />
+    <Compile Include="Tcp\MessageEventArgs.cs" />
+    <Compile Include="Tcp\MessageProcessor.cs" />
+    <Compile Include="Tcp\TcpClientWT.cs" />
+    <Compile Include="UI\Windows\HostServerWindow.xaml.cs">
+      <DependentUpon>HostServerWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Windows\JoinServerWindow.xaml.cs">
+      <DependentUpon>JoinServerWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Windows\MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\CustomControls\MessageContainer.xaml.cs">
+      <DependentUpon>MessageContainer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Windows\ProfileWindow.xaml.cs">
+      <DependentUpon>ProfileWindow.xaml</DependentUpon>
+    </Compile>
+    <Page Include="UI\Windows\FullscreenWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MainWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
+    <Page Include="Resources\Styles\ControlTemplates\PasswordBoxControlTemplate.xaml">
       <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\Styles\ControlTemplates\ToolTipStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Windows\HostServerWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Windows\JoinServerWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Browser\BrowserCommands\IBrowserCommand.cs" />
-    <Compile Include="Browser\BrowserCommands\SendFreeUserID.cs" />
-    <Compile Include="Browser\BrowserSettings.cs" />
-    <Compile Include="Browser\DisplayHandlerWT.cs" />
-    <Compile Include="Browser\RequestHandlerWT.cs" />
     <Compile Include="Chatting\ChatClient.cs" />
     <Compile Include="Chatting\ChatHelper.cs" />
     <Compile Include="Chatting\ChatServer.cs" />
-    <Compile Include="Chatting\Messages\BrowserCommandParser.cs" />
+    <Compile Include="Browser\BrowserCommands\BrowserCommandSerializer.cs" />
     <Compile Include="Chatting\Messages\MessageWT.cs" />
     <Compile Include="Chatting\Messages\MessageTypeWT.cs" />
-    <Compile Include="FullscreenWindow.xaml.cs">
+    <Compile Include="UI\Windows\FullscreenWindow.xaml.cs">
       <DependentUpon>FullscreenWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="JavaScriptsHolder.cs" />
-    <Compile Include="MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Page Include="Resources\Styles\ChatTextBoxStyle.xaml">
+    <Compile Include="Browser\JavaScriptsHolder.cs" />
+    <Page Include="Resources\Styles\ControlTemplates\ButtonControlTemplate.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\Styles\ControlTemplates\ChatListBoxControlTemplate.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\Styles\ControlTemplates\MenuItemControlTemplate.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\Styles\ControlTemplates\TextBoxControlTemplate.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\Styles\DefaultTheme.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Windows\MainWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\CustomControls\MessageContainer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Windows\ProfileWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -145,14 +216,14 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="CefSharp.Common">
-      <Version>75.1.143</Version>
-    </PackageReference>
-    <PackageReference Include="CefSharp.Wpf">
-      <Version>75.1.143</Version>
+    <PackageReference Include="Microsoft.Web.WebView2">
+      <Version>1.0.1054.31</Version>
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json">
       <Version>13.0.1</Version>
+    </PackageReference>
+    <PackageReference Include="NLog">
+      <Version>4.7.13</Version>
     </PackageReference>
     <PackageReference Include="SimpleTCP">
       <Version>1.0.24</Version>
@@ -165,10 +236,10 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\DLLs\pepflashplayer.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <EmbeddedResource Include="Resources\JavaScripts\ExitFullscreenWithEscapeButton.js" />
+    <EmbeddedResource Include="Resources\JavaScripts\NavigationCompleted.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\JavaScripts\RewindVideo.js" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

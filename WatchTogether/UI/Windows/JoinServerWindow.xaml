@@ -1,0 +1,21 @@
+﻿<Window x:Class="WatchTogether.UI.Windows.JoinServerWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:converters="clr-namespace:WatchTogether.Chatting.Messages.Converters"
+        xmlns:local="clr-namespace:WatchTogether.UI.Windows"
+        mc:Ignorable="d"
+        Title="Join a Server" Height="120" Width="352" WindowStartupLocation="CenterOwner" WindowStyle="ToolWindow" ShowInTaskbar="False" SizeToContent="Height" Background="{DynamicResource Window_Background}" ResizeMode="NoResize" FontSize="13" Loaded="Window_Loaded">
+    <Window.Resources>
+        <converters:StringToVisibilityConverter x:Key="stringToVisibilityConverter"/>
+    </Window.Resources>
+    <Grid>
+        <Label Content="Server address:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontSize="13"/>
+        <Label Content="Server password:" HorizontalAlignment="Left" Margin="10,42,0,0" VerticalAlignment="Top" FontSize="13"/>
+        <TextBox x:Name="addressTb" Margin="132,12,10,0" TextWrapping="Wrap" VerticalAlignment="Top" Template="{DynamicResource TextBoxControlTemplate1}" HorizontalContentAlignment="Right" Padding="0,0,10,0" Height="24" FontSize="13" VerticalContentAlignment="Center" MaxLines="1" PreviewTextInput="AddressTb_PreviewTextInput"/>
+        <PasswordBox Style="{DynamicResource PasswordBoxStyle1}" x:Name="passwordTb" Margin="132,44,10,0" VerticalAlignment="Top" HorizontalContentAlignment="Right" Padding="0,0,10,0" FontSize="13" Height="24" VerticalContentAlignment="Center" MaxLength="16"/>
+        <Button x:Name="cancelBtn" Content="Cancel" Margin="0,76,10,7" Template="{DynamicResource ButtonControlTemplate1}" FontSize="13" Click="CancelBtn_Click" HorizontalAlignment="Right" Width="64"/>
+        <Button x:Name="joinBtn" ToolTipService.ShowOnDisabled="True" Content="Join" Margin="0,76,79,7" Template="{DynamicResource ButtonControlTemplate1}" FontSize="13" IsDefault="True" Click="JoinBtn_Click" HorizontalAlignment="Right" Width="64"/>
+    </Grid>
+</Window>

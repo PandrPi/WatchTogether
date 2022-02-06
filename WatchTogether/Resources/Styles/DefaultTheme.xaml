@@ -1,0 +1,40 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:system="clr-namespace:System;assembly=mscorlib">
+    
+    <system:Int32 x:Key="CornerRadius">5</system:Int32>
+    <SolidColorBrush x:Key="Window_Background" Color="#FFD9EAF6"/>
+    
+    <SolidColorBrush x:Key="Panel_Background" Color="White"/>
+    <SolidColorBrush x:Key="Panel_Border" Color="#FFAFD5EF"/>
+    
+    <SolidColorBrush x:Key="TextBox_Background" Color="White"/>
+    <SolidColorBrush x:Key="TextBox_Border" Color="#FFAFD5EF"/>
+    <SolidColorBrush x:Key="TextBox_InvalidValue_Background" Color="#FFFFB2B2"/>
+    <SolidColorBrush x:Key="TextBox_MouseOver_Border" Color="#FF7EB4EA"/>
+    <SolidColorBrush x:Key="TextBox_KeyboardFocused_Border" Color="#FF569DE5"/>
+    
+    <SolidColorBrush x:Key="Button_Background" Color="#FFB2EAFF"/>
+    <SolidColorBrush x:Key="Button_Press" Color="#FF86CDFF"/>
+    <SolidColorBrush x:Key="Button_Hover" Color="#FFB2F9FF"/>
+    <SolidColorBrush x:Key="Button_Border" Color="#FFAFD5EF"/>
+    
+    <SolidColorBrush x:Key="MenuItem_Background" Color="#FFB2EAFF"/>
+    <SolidColorBrush x:Key="MenuItem_Press" Color="#FF86CDFF"/>
+    <SolidColorBrush x:Key="MenuItem_Hover" Color="#FFB2F9FF"/>
+    <SolidColorBrush x:Key="MenuItem_Border" Color="#FFAFD5EF"/>
+
+    <SolidColorBrush x:Key="Message_Background" Color="White"/>
+    <SolidColorBrush x:Key="Message_Border" Color="DarkGray"/>
+    <SolidColorBrush x:Key="Message_ReceivingTimeForeground" Color="#FF94D6A0"/>
+    <SolidColorBrush x:Key="Message_UserNameForeground" Color="#FF40A2B5"/>
+
+    <SolidColorBrush x:Key="HoverColor" Color="#FFA9D9FC"/>
+    <SolidColorBrush x:Key="PressColor" Color="#FFD9EAF6"/>
+    <SolidColorBrush x:Key="SelectionBrush" Color="#FF3D9EB0"/>
+
+    <DropShadowEffect x:Key="SoftShadows" Opacity="0.2"/>
+
+    <SolidColorBrush x:Key="ServerIconBrush" Color="DarkGray"/>
+
+</ResourceDictionary>

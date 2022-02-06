@@ -2,7 +2,8 @@
 {
 	enum MessageTypeWT
 	{
-		System = 0,
-		User = 1
+		ServerRequest = 0,
+		ClientCommand = 1,
+		UserMessage = 2
 	}
 }

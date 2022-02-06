@@ -1,0 +1,38 @@
+﻿<UserControl x:Class="WatchTogether.UI.CustomControls.MessageContainer"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WatchTogether.UI.CustomControls"
+             mc:Ignorable="d">
+    <UserControl.CacheMode>
+        <BitmapCache SnapsToDevicePixels="True" RenderAtScale="1"/>
+    </UserControl.CacheMode>
+    <Grid MaxWidth="300" MinHeight="56">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+
+        <Border x:Name="UserIconBorder" Background="{Binding SenderIconBrush, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MessageContainer}}}" Width="34" Height="34" CornerRadius="34" Grid.Column="0" HorizontalAlignment="Left" Margin="14,0,5,0" VerticalAlignment="Bottom">
+            <TextBlock x:Name="UserIconShortNameTB" Text="{Binding ShortSenderUserName, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MessageContainer}}}" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        </Border>
+        <Border CornerRadius="5" BorderThickness="1" Grid.Column="1" BorderBrush="{DynamicResource Message_Border}" Background="{DynamicResource Message_Background}" FlowDirection="LeftToRight">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0" Margin="12,5" VerticalAlignment="Top">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" x:Name="UserNameTB" Text="{Binding SenderUserName, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MessageContainer}}}" HorizontalAlignment="Left" Margin="0" VerticalAlignment="Top" Foreground="{DynamicResource Message_UserNameForeground}" Padding="0,0,5,0"/>
+                    <TextBlock Grid.Column="1" x:Name="ReceivingTimeTB" Text="{Binding ReceivingTime, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MessageContainer}}}" HorizontalAlignment="Right" Margin="0" TextWrapping="Wrap" VerticalAlignment="Top" Padding="5,0,2,0" Foreground="{DynamicResource Message_ReceivingTimeForeground}"/>
+                </Grid>
+                <TextBox Grid.Row="1" Margin="12,0,12,12" Text="{Binding MessageText, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MessageContainer}}}" Foreground="Black" MaxWidth="200" TextWrapping="Wrap" IsReadOnly="True" BorderBrush="{x:Null}" Background="{x:Null}" BorderThickness="0,0,0,0"/>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>
