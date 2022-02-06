@@ -20,6 +20,9 @@ namespace WatchTogether.Browser
             BlockedWords = SettingsModelManager.CurrentSettings.AdsToBlock ?? DefaultAdSources;
             BlockedWordsJoined = string.Format("(?:{0})", string.Join("|", BlockedWords));
             BlockerRegex = new Regex(BlockedWordsJoined, RegexOptions.Compiled);
+
+            SettingsModelManager.CurrentSettings.AdsToBlock = BlockedWords;
+            SettingsModelManager.Instance.SaveSettings();
         }
 
         /// <summary>

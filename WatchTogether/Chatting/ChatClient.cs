@@ -11,7 +11,7 @@ namespace WatchTogether.Chatting
 {
     sealed class ChatClient : IDisposable
     {
-        private event EventHandler<MessageWT> MessageReceived;
+        private event EventHandler<MessageWT> OnMessageReceived;
         private SimpleTcpClient client;
 
         public Dictionary<int, ClientData> ConnectedClients { get; set; }
@@ -30,20 +30,32 @@ namespace WatchTogether.Chatting
                 Delimiter = ChatManagerWT.MessageDelimiter
             };
 
-            // Initialize events
-            client.DelimiterDataReceived += Client_DelimiterDataReceived;
-            MessageReceived += ChatManagerWT.Instance.ChatManagerWT_MessageReceived;
+            InitializeEvents();
 
-            // Initialize a ClientData property
-            var userName = ChatHelper.GetUserName();
-            ChatHelper.GetUserIconBrush(out string userIconData);
-            ClientData = new ClientData(-1, userName, userIconData);
+            InitializeClientData(out string userName, out string userIconData);
 
-            // Save the UserName and UserIconData to the settings
+            SaveUserDataToSettings(userName, userIconData);
+        }
+
+        private static void SaveUserDataToSettings(string userName, string userIconData)
+        {
             var setting = SettingsModelManager.CurrentSettings;
             setting.UserName = userName;
             setting.UserIconData = userIconData;
             SettingsModelManager.CurrentSettings = setting;
+        }
+
+        private void InitializeClientData(out string userName, out string userIconData)
+        {
+            userName = ChatHelper.GetUserName();
+            ChatHelper.GetUserIconBrush(out userIconData);
+            ClientData = new ClientData(-1, userName, userIconData);
+        }
+
+        private void InitializeEvents()
+        {
+            client.DelimiterDataReceived += Client_DelimiterDataReceived;
+            OnMessageReceived += ChatManagerWT.Instance.ChatManagerWT_MessageReceived;
         }
 
         /// <summary>
@@ -82,24 +94,19 @@ namespace WatchTogether.Chatting
         {
             try
             {
-                // We should disconnect the client only if it is not null and it is connected to a server
-                if (client.TcpClient is null == false && client.TcpClient.Connected == true)
-                {
-                    // Disconnect client
-                    client.Disconnect();
-                    // Reset the UserID
-                    var clientData = ClientData;
-                    clientData.UserID = -1;
-                    ClientData = clientData;
-                    // Reset the ConnectedClients dictionary
-                    ConnectedClients.Clear();
-                    ConnectedClients = null;
-                    // Mark client as disconnected
-                    IsConnected = false;
+                if (client.TcpClient is null) return;
 
-                    // Clear the Chat history
-                    ChatManagerWT.Instance.ClearMessageHistory();
-                }
+                if (client.TcpClient.Connected == false) return;
+
+                client.Disconnect();
+
+                ResetUserID();
+
+                ResetConnectedClients();
+
+                IsConnected = false;
+
+                ChatManagerWT.Instance.ClearMessageHistory();
             }
             catch (Exception e)
             {
@@ -108,9 +115,19 @@ namespace WatchTogether.Chatting
             }
         }
 
-        /// <summary>
-        /// Releases the resources of the client
-        /// </summary>
+        private void ResetConnectedClients()
+        {
+            ConnectedClients.Clear();
+            ConnectedClients = null;
+        }
+
+        private void ResetUserID()
+        {
+            var clientData = ClientData;
+            clientData.UserID = -1;
+            ClientData = clientData;
+        }
+
         public void Dispose()
         {
             try
@@ -126,10 +143,6 @@ namespace WatchTogether.Chatting
             }
         }
 
-        /// <summary>
-        /// Sends a connection request to a server
-        /// </summary>
-        /// <param name="serverPassword">The password of a server</param>
         private void SendConnectionRequest(string serverPassword)
         {
             var commandText = BrowserCommandSerializer.Serialize(
@@ -152,19 +165,18 @@ namespace WatchTogether.Chatting
             var messageText = string.Format("{0} has joined the server", ClientData.UserName);
             var message = new MessageWT(messageText, DateTime.Now,
                 MessageTypeWT.UserMessage, ChatServer.ServerID, ChatServer.ServerUserName);
-            MessageReceived(this, message);
+            OnMessageReceived?.Invoke(this, message);
         }
 
         /// <summary>
         /// Sends message to the server
         /// </summary>
-        /// <param name="message">The message that will be sent to the server</param>
+        /// <param name="messageText">The message that will be sent to the server</param>
         public void SendMessage(string messageText, MessageTypeWT messageType = MessageTypeWT.UserMessage)
         {
-            if (client.TcpClient is null == true) return;
+            if (client.TcpClient is null) return;
             if (client.TcpClient.Connected == false) return;
 
-            // Create a message object
             var message = new MessageWT(messageText, default, messageType,
                 ClientData.UserID, ClientData.UserName);
 
@@ -179,17 +191,16 @@ namespace WatchTogether.Chatting
         {
             MessageWT message = MessageWT.FromString(e.MessageString);
 
-            if (message.MessageType == MessageTypeWT.UserMessage && IsConnected)
+            if (message.MessageType == MessageTypeWT.UserMessage)
             {
-                // Add the received user message to UI
+                if (IsConnected == false) return;
+
                 message.ConvertReceivingDateTimeToLocalTime();
-                MessageReceived(this, message);
+                OnMessageReceived?.Invoke(this, message);
             }
             else if (message.MessageType == MessageTypeWT.ClientCommand)
             {
-                // Parse the message.Text to get an actual IBrowserCommand instance
                 var request = BrowserCommandSerializer.Deserialize(message.Text);
-                // Execute the command
                 request.Execute(e);
             }
         }
