@@ -195,7 +195,7 @@ namespace WatchTogether.Chatting
             {
                 if (IsConnected == false) return;
 
-                message.ConvertReceivingDateTimeToLocalTime(); 
+                message.ConvertReceivingDateTimeToLocalTime();
                 OnMessageReceived?.Invoke(this, message);
             }
             else if (message.MessageType == MessageTypeWT.ClientCommand)
