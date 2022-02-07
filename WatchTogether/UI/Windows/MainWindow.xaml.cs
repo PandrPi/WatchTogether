@@ -1,4 +1,5 @@
-﻿using Squirrel;
+﻿using NLog;
+using Squirrel;
 using System.Windows;
 using WatchTogether.Browser;
 using WatchTogether.Chatting;
@@ -13,6 +14,7 @@ namespace WatchTogether.UI.Windows
     {
         public static MainWindow Instance { get; private set; }
 
+        private readonly ILogger Logger = LogManager.GetCurrentClassLogger();
         private ChatManagerWT chatManager;
         private BrowserManagerWT browserManager;
 
@@ -26,58 +28,30 @@ namespace WatchTogether.UI.Windows
             UpdateApp();
 
             new SettingsModelManager();
+
+            Logger.Trace("Initialized successfully");
         }
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            Logger.Trace("Started loading");
+
             chatManager = new ChatManagerWT(this);
 
             browserManager = new BrowserManagerWT(this);
             await browserManager.InitializeAsync();
 
             BrowserColumn.MinWidth = SystemParameters.WorkArea.Width * 0.3;
-            ChatColumn.MaxWidth = SystemParameters.WorkArea.Width * 0.3;
+            ChatColumn.MaxWidth = SystemParameters.WorkArea.Width * 0.5;
+
+            Logger.Trace("Loaded successfully");
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             chatManager.Dispose();
             browserManager.Dispose();
-        }
-
-        private void ProfileMenuItem_Click(object sender, RoutedEventArgs e)
-        {
-            var profileWindow = new ProfileWindow();
-            profileWindow.Owner = this;
-
-            if (profileWindow.ShowDialog() is true)
-            {
-                var iconData = profileWindow.UserIconData;
-                var userName = profileWindow.UserName;
-
-                var clientData = chatManager.Client.ClientData;
-                var userID = clientData is null ? -1 : clientData.UserID;
-
-                UpdateClientData(iconData, userName, userID);
-
-                SaveUserDataToSettings(iconData, userName);
-            }
-
-            profileWindow.Close();
-        }
-
-        private void UpdateClientData(string iconData, string userName, int userID)
-        {
-            chatManager.Client.ClientData = null;
-            chatManager.Client.ClientData = new ClientData(userID, userName, iconData);
-        }
-
-        private static void SaveUserDataToSettings(string iconData, string userName)
-        {
-            var settings = SettingsModelManager.CurrentSettings;
-            settings.UserIconData = iconData;
-            settings.UserName = userName;
-            SettingsModelManager.CurrentSettings = settings;
+            Logger.Trace("Closed successfully");
         }
 
         private async void UpdateApp()
@@ -86,11 +60,23 @@ namespace WatchTogether.UI.Windows
 
             if (System.Diagnostics.Debugger.IsAttached) return;
 
-            using (var manager = await UpdateManager.GitHubUpdateManager(repoUrl))
+            try
             {
-                await manager.UpdateApp();
-                MessageBox.Show("Temporal energy");
+                using (var manager = await UpdateManager.GitHubUpdateManager(repoUrl))
+                {
+                    await manager.UpdateApp();
+                    Logger.Trace("The app has been updated successfully");
+                }
             }
+            catch (System.Exception exception)
+            {
+                Logger.Trace(exception, $"The app update failed due to {exception.Message}");
+            }
+        }
+
+        private void ProfileMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            ProfileMenu.ProfileMenuItem_Click(sender, e);
         }
     }
 }

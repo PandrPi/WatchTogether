@@ -9,7 +9,7 @@
         xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
         x:Class="WatchTogether.UI.Windows.MainWindow"
         mc:Ignorable="d"
-        Title="New Window Title 2" Height="450" Width="800" Background="{DynamicResource Window_Background}" Closing="Window_Closing" Loaded="Window_Loaded">
+        Title="WatchTogether" Height="450" Width="800" Background="{DynamicResource Window_Background}" Closing="Window_Closing" Loaded="Window_Loaded">
     <Window.Resources>
         <converters:BoolToFlowDirectionConverter x:Key="boolToFlowDirectionConverter"/>
         <converters:BoolToHorizontalAlignmentConverter x:Key="boolToHorizontalAlignmentConverter"/>

@@ -99,6 +99,7 @@
     <Compile Include="Chatting\Messages\MessageData.cs" />
     <Compile Include="Chatting\UserIconColorBrushManager.cs" />
     <Compile Include="Chatting\UserIconHelper.cs" />
+    <Compile Include="ProfileMenu.cs" />
     <Compile Include="Settings\SettingsModelManager.cs" />
     <Compile Include="Settings\SettingsModel.cs" />
     <Compile Include="Tcp\IMessageProcessor.cs" />

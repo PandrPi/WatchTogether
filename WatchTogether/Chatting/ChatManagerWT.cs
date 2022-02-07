@@ -10,7 +10,7 @@ namespace WatchTogether.Chatting
 {
 
     /// <summary>
-    /// Manages interaction client/server and UI
+    /// Manages interaction between client/server and UI
     /// </summary>
     class ChatManagerWT : IDisposable
     {
@@ -19,7 +19,7 @@ namespace WatchTogether.Chatting
         public static readonly byte MessageDelimiter = (byte)'\r';
         public static Brush ServerIconBrush { get; private set; }
 
-        private MainWindow window;
+        private readonly MainWindow window;
         private ChatClient chatClient;
         private ChatServer chatServer;
         private ObservableCollection<MessageData> messages;

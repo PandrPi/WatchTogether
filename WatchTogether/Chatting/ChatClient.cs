@@ -1,4 +1,5 @@
-﻿using SimpleTCP;
+﻿using NLog;
+using SimpleTCP;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -11,8 +12,10 @@ namespace WatchTogether.Chatting
 {
     sealed class ChatClient : IDisposable
     {
-        private event EventHandler<MessageWT> OnMessageReceived;
+        private readonly ILogger Logger = LogManager.GetCurrentClassLogger();
         private SimpleTcpClient client;
+
+        private event EventHandler<MessageWT> OnMessageReceived;
 
         public Dictionary<int, ClientData> ConnectedClients { get; set; }
         public ClientData ClientData { get; set; }
@@ -23,7 +26,6 @@ namespace WatchTogether.Chatting
         /// </summary>
         public ChatClient()
         {
-            // Initialize instance
             client = new SimpleTcpClient
             {
                 StringEncoder = ChatManagerWT.MessageEncoder,
@@ -73,14 +75,19 @@ namespace WatchTogether.Chatting
             {
                 try
                 {
+                    Logger.Trace($"{nameof(ConnectAsync)} Trying to connect to '{ip}:{port}'...");
+
                     client.Connect(ip, port);
+
                     ConnectedClients = new Dictionary<int, ClientData>();
+
+                    Logger.Trace($"{nameof(ConnectAsync)} Connected successfully");
 
                     SendConnectionRequest(password);
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine($"{e.Message}, {e.StackTrace}");
+                    Logger.Trace(e, $"{nameof(ConnectAsync)} Connection failed due to {e.Message}");
                     MessageBox.Show(e.StackTrace, e.Message);
                     Disconnect();
                 }
@@ -92,11 +99,23 @@ namespace WatchTogether.Chatting
         /// </summary>
         public void Disconnect()
         {
+            var methodName = nameof(Disconnect);
+
             try
             {
-                if (client.TcpClient is null) return;
+                Logger.Trace($"{methodName} Trying to disconnect...");
 
-                if (client.TcpClient.Connected == false) return;
+                if (client.TcpClient is null)
+                {
+                    Logger.Trace($"{methodName} Failed! {nameof(client)}.TcpClient is null");
+                    return;
+                }
+
+                if (client.TcpClient.Connected == false)
+                {
+                    Logger.Trace($"{methodName} Failed! {nameof(client)}.TcpClient isn't connected");
+                    return;
+                }
 
                 client.Disconnect();
 
@@ -107,10 +126,12 @@ namespace WatchTogether.Chatting
                 IsConnected = false;
 
                 ChatManagerWT.Instance.ClearMessageHistory();
+
+                Logger.Trace($"{methodName} Disconnected successfully");
             }
             catch (Exception e)
             {
-                Console.WriteLine($"{e.Message}, {e.StackTrace}");
+                Logger.Trace(e, $"{methodName} failed due to {e.Message}");
                 MessageBox.Show(e.StackTrace, e.Message);
             }
         }
@@ -135,10 +156,12 @@ namespace WatchTogether.Chatting
                 Disconnect();
                 client.Dispose();
                 client = null;
+
+                Logger.Trace("Disposed successfully");
             }
             catch (Exception e)
             {
-                Console.WriteLine($"{e.Message}, {e.StackTrace}");
+                Logger.Trace(e, $"{nameof(Dispose)} failed due to {e.Message}");
                 MessageBox.Show(e.StackTrace, e.Message);
             }
         }
@@ -151,10 +174,14 @@ namespace WatchTogether.Chatting
                 ClientData.UserName,
                 ClientData.UserIconData);
             SendMessage(commandText, MessageTypeWT.ServerRequest);
+
+            Logger.Trace($"{nameof(SendConnectionRequest)} request was successfully sent");
         }
 
         /// <summary>
-        /// Shows a message about the successfull connection on the UI. This method exists
+        /// Shows a message about the successfull connection on the UI. 
+        /// 
+        ///     Remark: This method exists
         /// because the client cannot receive any client messages until the client has received
         /// a response to the connection request. The successful connection message is sent by
         /// the server to all connected clients when the connection request is processed by the
@@ -166,6 +193,8 @@ namespace WatchTogether.Chatting
             var message = new MessageWT(messageText, DateTime.Now,
                 MessageTypeWT.UserMessage, ChatServer.ServerID, ChatServer.ServerUserName);
             OnMessageReceived?.Invoke(this, message);
+
+            Logger.Trace($"{nameof(ShowSuccessfullConnectionMessage)} the server accepted our connection!");
         }
 
         /// <summary>
@@ -180,7 +209,6 @@ namespace WatchTogether.Chatting
             var message = new MessageWT(messageText, default, messageType,
                 ClientData.UserID, ClientData.UserName);
 
-            // Send the serialized message string to the server
             client.WriteLine(message.ToString());
         }
 
