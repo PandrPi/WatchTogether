@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using Squirrel;
+using System.Windows;
 using WatchTogether.Browser;
 using WatchTogether.Chatting;
 using WatchTogether.Settings;
@@ -14,7 +15,6 @@ namespace WatchTogether.UI.Windows
 
         private ChatManagerWT chatManager;
         private BrowserManagerWT browserManager;
-        private SettingsModelManager settingsManager;
 
         // TODO: Link for the WebView2 Runtime - https://go.microsoft.com/fwlink/p/?LinkId=2124703
 
@@ -23,22 +23,19 @@ namespace WatchTogether.UI.Windows
             Instance = this;
             InitializeComponent();
 
-            // Initialize settingsManager instance
-            settingsManager = new SettingsModelManager();
+            UpdateApp();
+
+            new SettingsModelManager();
         }
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            // Initialize chatManager instance
             chatManager = new ChatManagerWT(this);
 
-            // Initialize browserManager instance
             browserManager = new BrowserManagerWT(this);
             await browserManager.InitializeAsync();
 
-            // Set MinWidth property of the BrowserColumn
             BrowserColumn.MinWidth = SystemParameters.WorkArea.Width * 0.3;
-            // Set MaxWidth property of the ChatColumn
             ChatColumn.MaxWidth = SystemParameters.WorkArea.Width * 0.3;
         }
 
@@ -50,7 +47,6 @@ namespace WatchTogether.UI.Windows
 
         private void ProfileMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            // Initialize a HostServerWindow instance
             var profileWindow = new ProfileWindow();
             profileWindow.Owner = this;
 
@@ -62,18 +58,39 @@ namespace WatchTogether.UI.Windows
                 var clientData = chatManager.Client.ClientData;
                 var userID = clientData is null ? -1 : clientData.UserID;
 
-                chatManager.Client.ClientData = null;
-                chatManager.Client.ClientData = new ClientData(userID, userName, iconData);
+                UpdateClientData(iconData, userName, userID);
 
-                // Save the received iconData and userName values to the settings
-                var settings = SettingsModelManager.CurrentSettings;
-                settings.UserIconData = iconData;
-                settings.UserName = userName;
-                SettingsModelManager.CurrentSettings = settings;
+                SaveUserDataToSettings(iconData, userName);
             }
 
-            // Close the window
             profileWindow.Close();
+        }
+
+        private void UpdateClientData(string iconData, string userName, int userID)
+        {
+            chatManager.Client.ClientData = null;
+            chatManager.Client.ClientData = new ClientData(userID, userName, iconData);
+        }
+
+        private static void SaveUserDataToSettings(string iconData, string userName)
+        {
+            var settings = SettingsModelManager.CurrentSettings;
+            settings.UserIconData = iconData;
+            settings.UserName = userName;
+            SettingsModelManager.CurrentSettings = settings;
+        }
+
+        private async void UpdateApp()
+        {
+            const string repoUrl = "https://github.com/PandrPi/WatchTogether";
+
+            if (System.Diagnostics.Debugger.IsAttached) return;
+
+            using (var manager = await UpdateManager.GitHubUpdateManager(repoUrl))
+            {
+                await manager.UpdateApp();
+                MessageBox.Show("Temporal energy");
+            }
         }
     }
 }
