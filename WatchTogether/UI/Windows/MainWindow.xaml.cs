@@ -89,7 +89,6 @@ namespace WatchTogether.UI.Windows
             using (var manager = await UpdateManager.GitHubUpdateManager(repoUrl))
             {
                 await manager.UpdateApp();
-                MessageBox.Show("Temporal energy");
             }
         }
     }
